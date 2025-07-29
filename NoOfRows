@@ -1,0 +1,33 @@
+#include <iostream>
+#include <xlnt/xlnt.hpp>
+
+int main() {
+    try {
+        xlnt::workbook wb;
+        wb.load("sample.xlsx");  // Replace with your Excel file path
+
+        xlnt::worksheet ws = wb.active_sheet();
+
+        // Count the number of non-empty rows
+        int row_count = 0;
+        for (auto row : ws.rows()) {
+            bool is_empty = true;
+            for (auto cell : row) {
+                if (!cell.to_string().empty()) {
+                    is_empty = false;
+                    break;
+                }
+            }
+            if (!is_empty) {
+                row_count++;
+            }
+        }
+
+        std::cout << "Row count: " << row_count << std::endl;
+
+    } catch (const std::exception &ex) {
+        std::cerr << "Error reading Excel file: " << ex.what() << std::endl;
+    }
+
+    return 0;
+}
